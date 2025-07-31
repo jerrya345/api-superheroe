@@ -7,7 +7,7 @@ const router = express.Router()
 // Obtener mascotas de un usuario
 router.get('/user/:userId', async (req, res) => {
     try {
-        const userId = parseInt(req.params.userId)
+        const userId = req.params.userId
         const pets = await petService.getPetsByUserId(userId)
         res.json(pets)
     } catch (error) {
@@ -18,7 +18,7 @@ router.get('/user/:userId', async (req, res) => {
 // Obtener una mascota específica
 router.get('/:petId', async (req, res) => {
     try {
-        const petId = parseInt(req.params.petId)
+        const petId = req.params.petId
         const pet = await petService.getPetById(petId)
         res.json(pet)
     } catch (error) {
@@ -28,7 +28,7 @@ router.get('/:petId', async (req, res) => {
 
 // Crear nueva mascota
 router.post('/', [
-    check('userId').isInt().withMessage('El ID de usuario es requerido'),
+    check('userId').not().isEmpty().withMessage('El ID de usuario es requerido'),
     check('name').not().isEmpty().withMessage('El nombre de la mascota es requerido'),
     check('type').isIn(['dog', 'cat', 'bird', 'rabbit']).withMessage('Tipo de mascota inválido')
 ], async (req, res) => {
@@ -59,7 +59,7 @@ router.put('/:petId/stats', [
             return res.status(400).json({ errors: errors.array() })
         }
 
-        const petId = parseInt(req.params.petId)
+        const petId = req.params.petId
         const { energy, sleep, fun } = req.body
         const pet = await petService.updatePetStats(petId, energy, sleep, fun)
         
@@ -72,7 +72,7 @@ router.put('/:petId/stats', [
 // Eliminar mascota
 router.delete('/:petId', async (req, res) => {
     try {
-        const petId = parseInt(req.params.petId)
+        const petId = req.params.petId
         const result = await petService.deletePet(petId)
         res.json(result)
     } catch (error) {

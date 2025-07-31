@@ -14,7 +14,7 @@ class AuthService {
             }
             
             // Actualizar último login
-            await userRepository.updateUserLastLogin(user.id)
+            await userRepository.updateUserLastLogin(user._id)
             
             return user.toJSON()
         } catch (error) {
