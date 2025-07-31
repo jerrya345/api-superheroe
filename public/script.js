@@ -24,6 +24,17 @@ const apiStatus = document.getElementById('apiStatus');
 
 // Inicializar
 document.addEventListener('DOMContentLoaded', function() {
+    // Cargar mascota seleccionada si existe
+    if (window.currentPet) {
+        pet = {
+            name: window.currentPet.name,
+            energy: window.currentPet.energy,
+            sleep: window.currentPet.sleep,
+            fun: window.currentPet.fun,
+            sprite: window.currentPet.sprite
+        };
+    }
+    
     updatePetDisplay();
     testAPI();
     addMessage('¡Bienvenido! Tu mascota está lista para jugar.', 'info');
@@ -42,6 +53,37 @@ function updatePetDisplay() {
     
     funBar.style.width = pet.fun + '%';
     funValue.textContent = pet.fun + '%';
+    
+    // Guardar cambios en la API si hay una mascota seleccionada
+    if (window.currentPet) {
+        updatePetInAPI();
+    }
+}
+
+// Actualizar mascota en la API
+async function updatePetInAPI() {
+    try {
+        const response = await fetch(`${API_URL}/pets/${window.currentPet.id}/stats`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                energy: pet.energy,
+                sleep: pet.sleep,
+                fun: pet.fun
+            })
+        });
+        
+        if (response.ok) {
+            const updatedPet = await response.json();
+            // Actualizar la mascota en localStorage
+            localStorage.setItem('selectedPet', JSON.stringify(updatedPet));
+            window.currentPet = updatedPet;
+        }
+    } catch (error) {
+        console.error('Error actualizando mascota:', error);
+    }
 }
 
 // Agregar mensaje al log

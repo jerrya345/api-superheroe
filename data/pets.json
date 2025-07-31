@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "userId": 1,
+    "name": "Luna",
+    "type": "dog",
+    "sprite": "🐕",
+    "energy": 100,
+    "sleep": 0,
+    "fun": 50,
+    "createdAt": "2025-07-31T09:00:00.000Z",
+    "lastActivity": "2025-07-31T09:00:00.000Z"
+  }
+] 

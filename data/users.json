@@ -1,0 +1,11 @@
+[
+  {
+    "id": 1,
+    "username": "admin",
+    "email": "admin@mascotas.com",
+    "password": "admin123",
+    "role": "admin",
+    "createdAt": "2025-07-31T09:00:00.000Z",
+    "lastLogin": null
+  }
+] 

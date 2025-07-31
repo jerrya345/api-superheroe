@@ -81,5 +81,64 @@
     </div>
 
     <script src="script.js"></script>
+    <script>
+        // Verificar autenticación
+        window.addEventListener('load', () => {
+            const user = localStorage.getItem('user');
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const selectedPet = localStorage.getItem('selectedPet');
+            if (!selectedPet) {
+                window.location.href = 'pets.html';
+                return;
+            }
+
+            // Cargar la mascota seleccionada
+            const pet = JSON.parse(selectedPet);
+            window.currentPet = pet;
+            
+            // Actualizar la interfaz con la mascota seleccionada
+            document.getElementById('petName').textContent = pet.name;
+            document.getElementById('petSprite').textContent = pet.sprite;
+            
+            // Actualizar stats
+            document.getElementById('energyBar').style.width = pet.energy + '%';
+            document.getElementById('energyValue').textContent = pet.energy + '%';
+            document.getElementById('sleepBar').style.width = pet.sleep + '%';
+            document.getElementById('sleepValue').textContent = pet.sleep + '%';
+            document.getElementById('funBar').style.width = pet.fun + '%';
+            document.getElementById('funValue').textContent = pet.fun + '%';
+        });
+
+        // Función para volver a la lista de mascotas
+        function backToPets() {
+            window.location.href = 'pets.html';
+        }
+
+        // Agregar botón de volver al header
+        document.addEventListener('DOMContentLoaded', () => {
+            const header = document.querySelector('header');
+            const backButton = document.createElement('button');
+            backButton.textContent = '← Volver a Mis Mascotas';
+            backButton.style.cssText = `
+                position: absolute;
+                top: 20px;
+                left: 20px;
+                padding: 10px 15px;
+                border: none;
+                border-radius: 8px;
+                background: rgba(255,255,255,0.2);
+                color: white;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            `;
+            backButton.onclick = backToPets;
+            header.style.position = 'relative';
+            header.appendChild(backButton);
+        });
+    </script>
 </body>
 </html> 

@@ -1,5 +1,7 @@
 import express from 'express'
 import heroController from './controllers/heroController.js'
+import authController from './controllers/authController.js'
+import petController from './controllers/petController.js'
 import swaggerUi from 'swagger-ui-express'
 import swaggerJSDoc from 'swagger-jsdoc'
 import path from 'path'
@@ -14,7 +16,15 @@ const app = express()
 
 app.use(express.json())
 app.use(express.static(path.join(__dirname, 'public')))
-app.use('/api', heroController)
+
+// Redirigir la raíz a login
+app.get('/', (req, res) => {
+    res.redirect('/login.html')
+})
+
+app.use('/api/heroes', heroController)
+app.use('/api/auth', authController)
+app.use('/api/pets', petController)
 
 console.log('✅ Middleware configurado')
 

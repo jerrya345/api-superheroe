@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐾 Mis Mascotas</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .user-info {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .user-info h3 {
+            margin: 0;
+            color: #333;
+        }
+        
+        .logout-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            background: #dc3545;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .logout-btn:hover {
+            background: #c82333;
+        }
+        
+        .pets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .pet-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .pet-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .pet-sprite-large {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+        
+        .create-pet-btn {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 20px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .create-pet-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+        
+        .no-pets {
+            text-align: center;
+            padding: 40px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .no-pets h3 {
+            color: #666;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🐾 Mis Mascotas</h1>
+            <p>¡Cuida y juega con tus mascotas virtuales!</p>
+        </header>
+
+        <div class="user-info">
+            <div>
+                <h3>Bienvenido, <span id="userName">Usuario</span>!</h3>
+                <p>Gestiona tus mascotas virtuales</p>
+            </div>
+            <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
+        </div>
+
+        <div id="petsContainer">
+            <!-- Las mascotas se cargarán aquí -->
+        </div>
+
+        <div class="activities">
+            <h3>Acciones</h3>
+            <div class="activity-buttons">
+                <button class="activity-btn" onclick="createNewPet()">
+                    ➕ Crear Nueva Mascota
+                </button>
+                <button class="activity-btn" onclick="refreshPets()">
+                    🔄 Actualizar Lista
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://api-superheroe.onrender.com/api';
+        let currentUser = null;
+        let userPets = [];
+
+        // Verificar autenticación
+        window.addEventListener('load', () => {
+            const user = localStorage.getItem('user');
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            currentUser = JSON.parse(user);
+            document.getElementById('userName').textContent = currentUser.username;
+            loadUserPets();
+        });
+
+        async function loadUserPets() {
+            try {
+                const response = await fetch(`${API_URL}/pets/user/${currentUser.id}`);
+                userPets = await response.json();
+                displayPets();
+            } catch (error) {
+                console.error('Error cargando mascotas:', error);
+                showMessage('Error cargando mascotas', 'error');
+            }
+        }
+
+        function displayPets() {
+            const container = document.getElementById('petsContainer');
+            
+            if (userPets.length === 0) {
+                container.innerHTML = `
+                    <div class="no-pets">
+                        <h3>🐾 ¡No tienes mascotas aún!</h3>
+                        <p>Crea tu primera mascota virtual para empezar a jugar</p>
+                        <button class="create-pet-btn" onclick="createNewPet()">
+                            ➕ Crear Mi Primera Mascota
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="pets-grid">
+                    ${userPets.map(pet => `
+                        <div class="pet-card">
+                            <div class="pet-sprite-large">${pet.sprite}</div>
+                            <h3>${pet.name}</h3>
+                            <p>Tipo: ${pet.type}</p>
+                            <div class="stats">
+                                <div class="stat">
+                                    <span>❤️ Energía:</span>
+                                    <div class="progress-bar">
+                                        <div class="progress" style="width: ${pet.energy}%"></div>
+                                    </div>
+                                    <span>${pet.energy}%</span>
+                                </div>
+                                <div class="stat">
+                                    <span>😴 Sueño:</span>
+                                    <div class="progress-bar">
+                                        <div class="progress" style="width: ${pet.sleep}%"></div>
+                                    </div>
+                                    <span>${pet.sleep}%</span>
+                                </div>
+                                <div class="stat">
+                                    <span>🎮 Diversión:</span>
+                                    <div class="progress-bar">
+                                        <div class="progress" style="width: ${pet.fun}%"></div>
+                                    </div>
+                                    <span>${pet.fun}%</span>
+                                </div>
+                            </div>
+                            <button class="activity-btn" onclick="playWithPet(${pet.id})">
+                                🎮 Jugar con ${pet.name}
+                            </button>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function createNewPet() {
+            const petName = prompt('¿Cómo se llama tu mascota?');
+            if (!petName) return;
+
+            const petTypes = [
+                { name: 'Perro', value: 'dog', emoji: '🐕' },
+                { name: 'Gato', value: 'cat', emoji: '🐱' },
+                { name: 'Pájaro', value: 'bird', emoji: '🐦' },
+                { name: 'Conejo', value: 'rabbit', emoji: '🐰' }
+            ];
+
+            const typeOptions = petTypes.map(type => 
+                `${type.emoji} ${type.name}`
+            ).join('\n');
+
+            const typeChoice = prompt(`Elige el tipo de mascota:\n${typeOptions}`);
+            if (!typeChoice) return;
+
+            const selectedType = petTypes.find(type => 
+                typeChoice.includes(type.emoji) || typeChoice.includes(type.name)
+            );
+
+            if (!selectedType) {
+                alert('Tipo de mascota no válido');
+                return;
+            }
+
+            createPet(petName, selectedType.value);
+        }
+
+        async function createPet(name, type) {
+            try {
+                const response = await fetch(`${API_URL}/pets`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        userId: currentUser.id,
+                        name: name,
+                        type: type
+                    })
+                });
+
+                if (response.ok) {
+                    const newPet = await response.json();
+                    userPets.push(newPet);
+                    displayPets();
+                    showMessage(`¡${name} ha sido creado exitosamente!`, 'success');
+                } else {
+                    const error = await response.json();
+                    showMessage(error.error || 'Error creando mascota', 'error');
+                }
+            } catch (error) {
+                showMessage('Error de conexión', 'error');
+            }
+        }
+
+        function playWithPet(petId) {
+            // Guardar la mascota seleccionada y redirigir al juego
+            const selectedPet = userPets.find(pet => pet.id === petId);
+            if (selectedPet) {
+                localStorage.setItem('selectedPet', JSON.stringify(selectedPet));
+                window.location.href = 'index.html';
+            }
+        }
+
+        function refreshPets() {
+            loadUserPets();
+        }
+
+        function logout() {
+            localStorage.removeItem('user');
+            localStorage.removeItem('selectedPet');
+            window.location.href = 'login.html';
+        }
+
+        function showMessage(message, type) {
+            // Implementar sistema de mensajes si es necesario
+            console.log(`${type}: ${message}`);
+        }
+    </script>
+</body>
+</html> 
