@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "name": "Peter Parker",
+    "alias": "Spider-Man",
+    "city": "New York",
+    "team": "Avengers"
+  },
+  {
+    "id": 2,
+    "name": "Bruce Wayne",
+    "alias": "Batman",
+    "city": "Gotham City",
+    "team": "Justice League"
+  },
+  {
+    "id": 3,
+    "name": "Clark Kent",
+    "alias": "Superman",
+    "city": "Metropolis",
+    "team": "Justice League"
+  },
+  {
+    "id": 4,
+    "name": "Tony Stark",
+    "alias": "Iron Man",
+    "city": "New York",
+    "team": "Avengers"
+  },
+  {
+    "id": 5,
+    "name": "Roberto Gómez Bolaños",
+    "alias": "Chapulin Colorado",
+    "city": "CDMX",
+    "team": "Independiente"
+  }
+] 

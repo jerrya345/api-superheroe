@@ -1,0 +1,184 @@
+{
+	"info": {
+		"_postman_id": "api-superheroes-collection",
+		"name": "API Superhéroes",
+		"description": "Colección completa de la API de Superhéroes con Clean Architecture",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Obtener todos los superhéroes",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/heroes",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"heroes"
+					]
+				},
+				"description": "Obtiene la lista completa de todos los superhéroes"
+			},
+			"response": []
+		},
+		{
+			"name": "Obtener superhéroe por ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/heroes/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"heroes",
+						"1"
+					]
+				},
+				"description": "Obtiene un superhéroe específico por su ID"
+			},
+			"response": []
+		},
+		{
+			"name": "Crear nuevo superhéroe",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Spider-Man\",\n    \"alias\": \"Peter Parker\",\n    \"powers\": [\"Trepar paredes\", \"Sentido arácnido\", \"Lanzar telarañas\"],\n    \"universe\": \"Marvel\",\n    \"city\": \"Nueva York\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/heroes",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"heroes"
+					]
+				},
+				"description": "Crea un nuevo superhéroe en la base de datos"
+			},
+			"response": []
+		},
+		{
+			"name": "Actualizar superhéroe",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Spider-Man Actualizado\",\n    \"alias\": \"Peter Parker\",\n    \"powers\": [\"Trepar paredes\", \"Sentido arácnido\", \"Lanzar telarañas\", \"Velocidad mejorada\"],\n    \"universe\": \"Marvel\",\n    \"city\": \"Nueva York\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/heroes/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"heroes",
+						"1"
+					]
+				},
+				"description": "Actualiza la información de un superhéroe existente"
+			},
+			"response": []
+		},
+		{
+			"name": "Eliminar superhéroe",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/heroes/1",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"heroes",
+						"1"
+					]
+				},
+				"description": "Elimina un superhéroe de la base de datos"
+			},
+			"response": []
+		},
+		{
+			"name": "Buscar superhéroes por ciudad",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/api/heroes/city/Nueva York",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"heroes",
+						"city",
+						"Nueva York"
+					]
+				},
+				"description": "Busca superhéroes que operan en una ciudad específica"
+			},
+			"response": []
+		},
+		{
+			"name": "Enfrentar superhéroe con villano",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"villain\": \"El Joker\"\n}"
+				},
+				"url": {
+					"raw": "{{base_url}}/api/heroes/1/enfrentar",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"api",
+						"heroes",
+						"1",
+						"enfrentar"
+					]
+				},
+				"description": "Simula un enfrentamiento entre un superhéroe y un villano"
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:3001",
+			"type": "string"
+		}
+	]
+} 
