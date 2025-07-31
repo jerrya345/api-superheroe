@@ -78,6 +78,17 @@
             <div id="apiStatus" class="status-indicator">Conectando...</div>
             <button onclick="testAPI()" class="test-btn">Probar API</button>
         </div>
+
+        <div class="audio-controls">
+            <h3>🎵 Controles de Audio</h3>
+            <div class="control-buttons">
+                <button id="musicToggle" onclick="toggleMusic()" class="control-btn">
+                    🔇 Silenciar Música
+                </button>
+                <button onclick="adjustVolume(0.1)" class="control-btn">🔉 Bajar</button>
+                <button onclick="adjustVolume(0.3)" class="control-btn">🔊 Subir</button>
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>

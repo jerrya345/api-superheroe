@@ -28,6 +28,43 @@ const activityEmojis = {
     cuddle: '🤗'
 };
 
+// Sistema de sonidos
+const sounds = {
+    // Sonidos específicos por tipo de mascota
+    dog: {
+        play: 'sonidos de perro.mp3',
+        eat: 'eating-crackers-sound-341911.mp3',
+        sleep: 'bostezo.mp3'
+    },
+    cat: {
+        play: 'meow.mp3',
+        eat: 'eating-crackers-sound-341911.mp3',
+        sleep: 'ronroneo.mp3'
+    },
+    bird: {
+        play: 'sonido pajaro.mp3',
+        eat: 'eating-crackers-sound-341911.mp3',
+        sleep: 'bostezo.mp3'
+    },
+    rabbit: {
+        play: 'rabbit-oinks-and-squeaks-71608.mp3',
+        eat: 'rabbit-eating-22893.mp3',
+        sleep: 'bostezo.mp3'
+    },
+    // Sonidos genéricos para todas las mascotas
+    generic: {
+        walk: 'caminar.mp3',
+        cuddle: 'abrazo.mp3',
+        click: 'ladrido.mp3' // Usar como sonido de click genérico
+    },
+    // Música de fondo
+    background: 'musica de menu.mp3'
+};
+
+// Audio objects
+let backgroundMusic = null;
+let currentPetType = null;
+
 // Elementos del DOM
 const petSprite = document.getElementById('petSprite');
 const petName = document.getElementById('petName');
@@ -39,6 +76,82 @@ const funBar = document.getElementById('funBar');
 const funValue = document.getElementById('funValue');
 const messageLog = document.getElementById('messageLog');
 const apiStatus = document.getElementById('apiStatus');
+
+// Función para reproducir sonidos
+function playSound(soundType, activity = null) {
+    try {
+        let soundFile = null;
+        
+        if (activity && currentPetType && sounds[currentPetType] && sounds[currentPetType][activity]) {
+            // Sonido específico para el tipo de mascota
+            soundFile = sounds[currentPetType][activity];
+        } else if (sounds.generic[soundType]) {
+            // Sonido genérico
+            soundFile = sounds.generic[soundType];
+        }
+        
+        if (soundFile) {
+            const audio = new Audio(`sounds/${soundFile}`);
+            audio.volume = 0.3; // Volumen moderado
+            audio.play().catch(e => console.log('Error reproduciendo sonido:', e));
+        }
+    } catch (error) {
+        console.log('Error con el sistema de sonidos:', error);
+    }
+}
+
+// Función para iniciar música de fondo
+function startBackgroundMusic() {
+    try {
+        backgroundMusic = new Audio(`sounds/${sounds.background}`);
+        backgroundMusic.volume = 0.2; // Volumen bajo para música de fondo
+        backgroundMusic.loop = true;
+        backgroundMusic.play().catch(e => console.log('Error reproduciendo música de fondo:', e));
+    } catch (error) {
+        console.log('Error con la música de fondo:', error);
+    }
+}
+
+// Función para detener música de fondo
+function stopBackgroundMusic() {
+    if (backgroundMusic) {
+        backgroundMusic.pause();
+        backgroundMusic.currentTime = 0;
+    }
+}
+
+// Variables para control de música
+let musicMuted = false;
+
+// Función para alternar música
+function toggleMusic() {
+    const toggleBtn = document.getElementById('musicToggle');
+    
+    if (musicMuted) {
+        // Activar música
+        if (backgroundMusic) {
+            backgroundMusic.play();
+        } else {
+            startBackgroundMusic();
+        }
+        musicMuted = false;
+        toggleBtn.textContent = '🔇 Silenciar Música';
+    } else {
+        // Silenciar música
+        if (backgroundMusic) {
+            backgroundMusic.pause();
+        }
+        musicMuted = true;
+        toggleBtn.textContent = '🔊 Activar Música';
+    }
+}
+
+// Función para ajustar volumen
+function adjustVolume(volume) {
+    if (backgroundMusic) {
+        backgroundMusic.volume = Math.max(0.1, Math.min(0.5, volume));
+    }
+}
 
 // Inicializar
 document.addEventListener('DOMContentLoaded', function() {
@@ -53,6 +166,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 fun: window.currentPet.fun,
                 sprite: window.currentPet.sprite
             };
+            currentPetType = window.currentPet.type;
             addMessage(`¡Bienvenido! ${pet.name} está lista para jugar.`, 'info');
         } else {
             addMessage('¡Bienvenido! Tu mascota está lista para jugar.', 'info');
@@ -60,6 +174,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         updatePetDisplay();
         testAPI();
+        
+        // Iniciar música de fondo
+        startBackgroundMusic();
     }, 100);
 });
 
@@ -133,6 +250,9 @@ function play() {
     updatePetDisplay();
     addMessage('🎾 ¡Tu mascota está jugando! Se divierte mucho contigo.', 'success');
     
+    // Reproducir sonido de jugar
+    playSound('play', 'play');
+    
     setTimeout(() => {
         // Restaurar el emoji original de la mascota
         if (window.currentPet && window.currentPet.type) {
@@ -157,6 +277,9 @@ function sleep() {
     pet.sprite = activityEmojis.sleep;
     updatePetDisplay();
     addMessage('😴 Tu mascota está durmiendo profundamente...', 'info');
+    
+    // Reproducir sonido de dormir
+    playSound('sleep', 'sleep');
     
     setTimeout(() => {
         // Restaurar el emoji original de la mascota
@@ -183,6 +306,9 @@ function eat() {
     updatePetDisplay();
     addMessage('🍖 Tu mascota está comiendo deliciosamente.', 'success');
     
+    // Reproducir sonido de comer
+    playSound('eat', 'eat');
+    
     setTimeout(() => {
         // Restaurar el emoji original de la mascota
         if (window.currentPet && window.currentPet.type) {
@@ -207,6 +333,9 @@ function walk() {
     pet.sprite = activityEmojis.walk;
     updatePetDisplay();
     addMessage('🚶‍♂️ Tu mascota está paseando por el parque.', 'success');
+    
+    // Reproducir sonido de caminar
+    playSound('walk');
     
     setTimeout(() => {
         // Restaurar el emoji original de la mascota
@@ -252,6 +381,9 @@ function cuddle() {
     updatePetDisplay();
     addMessage('🤗 Tu mascota está recibiendo muchos abrazos y amor.', 'success');
     
+    // Reproducir sonido de abrazo
+    playSound('cuddle');
+    
     setTimeout(() => {
         // Restaurar el emoji original de la mascota
         if (window.currentPet && window.currentPet.type) {
@@ -290,6 +422,9 @@ async function testAPI() {
 petSprite.addEventListener('click', function() {
     pet.fun = Math.min(100, pet.fun + 5);
     updatePetDisplay();
+    
+    // Reproducir sonido de click
+    playSound('click');
     
     // Usar el emoji correcto de la mascota en el mensaje
     let petEmoji = '🐕';
