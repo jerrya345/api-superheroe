@@ -1,6 +1,6 @@
 // Estado de la mascota
 let pet = {
-    name: 'Luna',
+    name: '',
     energy: 100,
     sleep: 0,
     fun: 50,
@@ -9,6 +9,24 @@ let pet = {
 
 // API URL
 const API_URL = 'https://api-superheroe.onrender.com/api';
+
+// Emojis por tipo de mascota
+const petEmojis = {
+    dog: '🐕',
+    cat: '🐱',
+    bird: '🐦',
+    rabbit: '🐰'
+};
+
+// Emojis de actividades
+const activityEmojis = {
+    play: '🎾',
+    sleep: '😴',
+    eat: '🍖',
+    walk: '🚶‍♂️',
+    train: '🎯',
+    cuddle: '🤗'
+};
 
 // Elementos del DOM
 const petSprite = document.getElementById('petSprite');
@@ -33,11 +51,13 @@ document.addEventListener('DOMContentLoaded', function() {
             fun: window.currentPet.fun,
             sprite: window.currentPet.sprite
         };
+        addMessage(`¡Bienvenido! ${pet.name} está lista para jugar.`, 'info');
+    } else {
+        addMessage('¡Bienvenido! Tu mascota está lista para jugar.', 'info');
     }
     
     updatePetDisplay();
     testAPI();
-    addMessage('¡Bienvenido! Tu mascota está lista para jugar.', 'info');
 });
 
 // Actualizar la visualización de la mascota
@@ -106,12 +126,17 @@ function play() {
     pet.fun = Math.min(100, pet.fun + 25);
     pet.sleep = Math.min(100, pet.sleep + 5);
     
-    pet.sprite = '🎾';
+    pet.sprite = activityEmojis.play;
     updatePetDisplay();
     addMessage('🎾 ¡Tu mascota está jugando! Se divierte mucho contigo.', 'success');
     
     setTimeout(() => {
-        pet.sprite = '🐕';
+        // Restaurar el emoji original de la mascota
+        if (window.currentPet && window.currentPet.type) {
+            pet.sprite = petEmojis[window.currentPet.type] || '🐕';
+        } else {
+            pet.sprite = '🐕';
+        }
         updatePetDisplay();
     }, 2000);
 }
@@ -126,12 +151,17 @@ function sleep() {
     pet.energy = Math.min(100, pet.energy + 20);
     pet.fun = Math.max(0, pet.fun - 10);
     
-    pet.sprite = '😴';
+    pet.sprite = activityEmojis.sleep;
     updatePetDisplay();
     addMessage('😴 Tu mascota está durmiendo profundamente...', 'info');
     
     setTimeout(() => {
-        pet.sprite = '🐕';
+        // Restaurar el emoji original de la mascota
+        if (window.currentPet && window.currentPet.type) {
+            pet.sprite = petEmojis[window.currentPet.type] || '🐕';
+        } else {
+            pet.sprite = '🐕';
+        }
         updatePetDisplay();
         addMessage('😊 ¡Tu mascota se despertó renovada!', 'success');
     }, 3000);
@@ -146,12 +176,17 @@ function eat() {
     pet.energy = Math.min(100, pet.energy + 25);
     pet.fun = Math.min(100, pet.fun + 10);
     
-    pet.sprite = '🍖';
+    pet.sprite = activityEmojis.eat;
     updatePetDisplay();
     addMessage('🍖 Tu mascota está comiendo deliciosamente.', 'success');
     
     setTimeout(() => {
-        pet.sprite = '🐕';
+        // Restaurar el emoji original de la mascota
+        if (window.currentPet && window.currentPet.type) {
+            pet.sprite = petEmojis[window.currentPet.type] || '🐕';
+        } else {
+            pet.sprite = '🐕';
+        }
         updatePetDisplay();
     }, 2000);
 }
@@ -166,12 +201,17 @@ function walk() {
     pet.fun = Math.min(100, pet.fun + 15);
     pet.sleep = Math.min(100, pet.sleep + 10);
     
-    pet.sprite = '🚶‍♂️';
+    pet.sprite = activityEmojis.walk;
     updatePetDisplay();
     addMessage('🚶‍♂️ Tu mascota está paseando por el parque.', 'success');
     
     setTimeout(() => {
-        pet.sprite = '🐕';
+        // Restaurar el emoji original de la mascota
+        if (window.currentPet && window.currentPet.type) {
+            pet.sprite = petEmojis[window.currentPet.type] || '🐕';
+        } else {
+            pet.sprite = '🐕';
+        }
         updatePetDisplay();
     }, 2500);
 }
@@ -186,12 +226,17 @@ function train() {
     pet.fun = Math.min(100, pet.fun + 20);
     pet.sleep = Math.min(100, pet.sleep + 15);
     
-    pet.sprite = '🎯';
+    pet.sprite = activityEmojis.train;
     updatePetDisplay();
     addMessage('🎯 Tu mascota está entrenando nuevos trucos.', 'success');
     
     setTimeout(() => {
-        pet.sprite = '🐕';
+        // Restaurar el emoji original de la mascota
+        if (window.currentPet && window.currentPet.type) {
+            pet.sprite = petEmojis[window.currentPet.type] || '🐕';
+        } else {
+            pet.sprite = '🐕';
+        }
         updatePetDisplay();
     }, 3000);
 }
@@ -200,12 +245,17 @@ function cuddle() {
     pet.fun = Math.min(100, pet.fun + 15);
     pet.sleep = Math.min(100, pet.sleep + 5);
     
-    pet.sprite = '🤗';
+    pet.sprite = activityEmojis.cuddle;
     updatePetDisplay();
     addMessage('🤗 Tu mascota está recibiendo muchos abrazos y amor.', 'success');
     
     setTimeout(() => {
-        pet.sprite = '🐕';
+        // Restaurar el emoji original de la mascota
+        if (window.currentPet && window.currentPet.type) {
+            pet.sprite = petEmojis[window.currentPet.type] || '🐕';
+        } else {
+            pet.sprite = '🐕';
+        }
         updatePetDisplay();
     }, 1500);
 }
@@ -237,7 +287,13 @@ async function testAPI() {
 petSprite.addEventListener('click', function() {
     pet.fun = Math.min(100, pet.fun + 5);
     updatePetDisplay();
-    addMessage('🐕 ¡Tu mascota está feliz de que la acaricies!', 'success');
+    
+    // Usar el emoji correcto de la mascota en el mensaje
+    let petEmoji = '🐕';
+    if (window.currentPet && window.currentPet.type) {
+        petEmoji = petEmojis[window.currentPet.type] || '🐕';
+    }
+    addMessage(`${petEmoji} ¡Tu mascota está feliz de que la acaricies!`, 'success');
 });
 
 // Degradación natural de stats
@@ -250,16 +306,23 @@ setInterval(() => {
 
 // Mensajes aleatorios
 const randomMessages = [
-    '🐕 Tu mascota te mira con amor.',
-    '😊 Tu mascota está muy feliz contigo.',
-    '🎾 Tu mascota quiere jugar más.',
-    '🍖 Tu mascota tiene un poco de hambre.',
-    '😴 Tu mascota está un poco cansada.'
+    'Tu mascota te mira con amor.',
+    'Tu mascota está muy feliz contigo.',
+    'Tu mascota quiere jugar más.',
+    'Tu mascota tiene un poco de hambre.',
+    'Tu mascota está un poco cansada.'
 ];
 
 setInterval(() => {
     if (Math.random() < 0.3) { // 30% de probabilidad
         const message = randomMessages[Math.floor(Math.random() * randomMessages.length)];
-        addMessage(message, 'info');
+        
+        // Usar el emoji correcto de la mascota
+        let petEmoji = '🐕';
+        if (window.currentPet && window.currentPet.type) {
+            petEmoji = petEmojis[window.currentPet.type] || '🐕';
+        }
+        
+        addMessage(`${petEmoji} ${message}`, 'info');
     }
 }, 60000); // Cada minuto 
