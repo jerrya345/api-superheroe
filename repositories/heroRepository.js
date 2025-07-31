@@ -1,7 +1,11 @@
 import fs from 'fs-extra'
+import path from 'path'
+import { fileURLToPath } from 'url'
 import Hero from '../models/heroModel.js'
 
-const filePath = './data/superheroes.json'
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = path.dirname(__filename)
+const filePath = path.join(__dirname, '../data/superheroes.json')
 
 async function getHeroes() {
     try {
