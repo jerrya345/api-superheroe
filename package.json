@@ -11,10 +11,10 @@
   "license": "ISC",
   "description": "API de Superhéroes con Clean Architecture",
   "dependencies": {
-    "express": "^5.1.0",
+    "express": "^4.18.2",
     "fs-extra": "^11.3.0",
     "express-validator": "^7.0.1",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^4.7.2"
+    "swagger-ui-express": "^5.0.0"
   }
 }
