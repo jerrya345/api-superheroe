@@ -1,0 +1,15 @@
+{
+	"id": "api-superheroes-environment",
+	"name": "API Superhéroes - Production",
+	"values": [
+		{
+			"key": "base_url",
+			"value": "https://api-superheroe.onrender.com",
+			"type": "default",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2025-07-31T09:00:00.000Z",
+	"_postman_exported_using": "Postman/10.0.0"
+} 

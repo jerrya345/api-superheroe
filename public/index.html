@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐾 Mascotas Virtuales</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🐾 Mascotas Virtuales</h1>
+            <p>¡Cuida y juega con tu mascota!</p>
+        </header>
+
+        <div class="pet-container">
+            <div class="pet">
+                <div class="pet-sprite" id="petSprite">🐕</div>
+                <div class="pet-info">
+                    <h2 id="petName">Luna</h2>
+                    <div class="stats">
+                        <div class="stat">
+                            <span>❤️ Energía:</span>
+                            <div class="progress-bar">
+                                <div class="progress" id="energyBar" style="width: 100%"></div>
+                            </div>
+                            <span id="energyValue">100%</span>
+                        </div>
+                        <div class="stat">
+                            <span>😴 Sueño:</span>
+                            <div class="progress-bar">
+                                <div class="progress" id="sleepBar" style="width: 0%"></div>
+                            </div>
+                            <span id="sleepValue">0%</span>
+                        </div>
+                        <div class="stat">
+                            <span>🎮 Diversión:</span>
+                            <div class="progress-bar">
+                                <div class="progress" id="funBar" style="width: 50%"></div>
+                            </div>
+                            <span id="funValue">50%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="activities">
+            <h3>Actividades</h3>
+            <div class="activity-buttons">
+                <button class="activity-btn" onclick="play()">
+                    🎾 Jugar
+                </button>
+                <button class="activity-btn" onclick="sleep()">
+                    😴 Dormir
+                </button>
+                <button class="activity-btn" onclick="eat()">
+                    🍖 Comer
+                </button>
+                <button class="activity-btn" onclick="walk()">
+                    🚶‍♂️ Pasear
+                </button>
+                <button class="activity-btn" onclick="train()">
+                    🎯 Entrenar
+                </button>
+                <button class="activity-btn" onclick="cuddle()">
+                    🤗 Abrazar
+                </button>
+            </div>
+        </div>
+
+        <div class="messages">
+            <div id="messageLog" class="message-log"></div>
+        </div>
+
+        <div class="api-status">
+            <h3>🔗 Estado de la API</h3>
+            <div id="apiStatus" class="status-indicator">Conectando...</div>
+            <button onclick="testAPI()" class="test-btn">Probar API</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
