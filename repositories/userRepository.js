@@ -1,78 +1,90 @@
-import fs from 'fs-extra'
-import path from 'path'
-import { fileURLToPath } from 'url'
-import User from '../models/userModel.js'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-const filePath = path.join(__dirname, '../data/users.json')
+import User from '../models/userModel.js';
 
 async function getUsers() {
     try {
-        const data = await fs.readJson(filePath)
-        return data.map(user => new User(
-            user.id, user.username, user.email, user.password, user.role, user.createdAt
-        ))
+        const users = await User.find({});
+        return users;
     } catch (error) {
-        console.error('Error reading users:', error)
-        return []
-    }
-}
-
-async function saveUsers(users) {
-    try {
-        // Convertir usuarios a objetos planos incluyendo la contraseña
-        const usersData = users.map(user => ({
-            id: user.id,
-            username: user.username,
-            email: user.email,
-            password: user.password,
-            role: user.role,
-            createdAt: user.createdAt,
-            lastLogin: user.lastLogin
-        }))
-        await fs.writeJson(filePath, usersData)
-    } catch (error) {
-        console.error('Error saving users:', error)
-        throw error
+        console.error('Error reading users:', error);
+        return [];
     }
 }
 
 async function findUserByUsername(username) {
-    const users = await getUsers()
-    return users.find(user => user.username === username)
+    try {
+        return await User.findOne({ username });
+    } catch (error) {
+        console.error('Error finding user by username:', error);
+        return null;
+    }
 }
 
 async function findUserByEmail(email) {
-    const users = await getUsers()
-    return users.find(user => user.email === email)
+    try {
+        return await User.findOne({ email });
+    } catch (error) {
+        console.error('Error finding user by email:', error);
+        return null;
+    }
 }
 
-async function createUser(user) {
-    const users = await getUsers()
-    const newId = users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1
-    const newUser = new User(newId, user.username, user.email, user.password, user.role)
-    
-    users.push(newUser)
-    await saveUsers(users)
-    return newUser
+async function findUserById(id) {
+    try {
+        return await User.findById(id);
+    } catch (error) {
+        console.error('Error finding user by id:', error);
+        return null;
+    }
+}
+
+async function createUser(userData) {
+    try {
+        const newUser = new User(userData);
+        return await newUser.save();
+    } catch (error) {
+        console.error('Error creating user:', error);
+        throw error;
+    }
 }
 
 async function updateUserLastLogin(userId) {
-    const users = await getUsers()
-    const userIndex = users.findIndex(user => user.id === userId)
-    
-    if (userIndex !== -1) {
-        users[userIndex].lastLogin = new Date()
-        await saveUsers(users)
+    try {
+        return await User.findByIdAndUpdate(
+            userId,
+            { lastLogin: new Date() },
+            { new: true }
+        );
+    } catch (error) {
+        console.error('Error updating user last login:', error);
+        throw error;
+    }
+}
+
+async function updateUser(userId, updateData) {
+    try {
+        return await User.findByIdAndUpdate(userId, updateData, { new: true });
+    } catch (error) {
+        console.error('Error updating user:', error);
+        throw error;
+    }
+}
+
+async function deleteUser(userId) {
+    try {
+        return await User.findByIdAndDelete(userId);
+    } catch (error) {
+        console.error('Error deleting user:', error);
+        throw error;
     }
 }
 
 export default {
     getUsers,
-    saveUsers,
     findUserByUsername,
     findUserByEmail,
+    findUserById,
     createUser,
-    updateUserLastLogin
-} 
+    updateUserLastLogin,
+    updateUser,
+    deleteUser
+}; 

@@ -1,38 +1,66 @@
-class Pet {
-    constructor(id, userId, name, type, sprite, energy = 100, sleep = 0, fun = 50, createdAt = new Date()) {
-        this.id = id
-        this.userId = userId
-        this.name = name
-        this.type = type // 'dog', 'cat', 'bird', 'rabbit'
-        this.sprite = sprite
-        this.energy = energy
-        this.sleep = sleep
-        this.fun = fun
-        this.createdAt = createdAt
-        this.lastActivity = new Date()
-    }
+import mongoose from 'mongoose';
 
-    updateStats(energy, sleep, fun) {
-        this.energy = Math.max(0, Math.min(100, energy))
-        this.sleep = Math.max(0, Math.min(100, sleep))
-        this.fun = Math.max(0, Math.min(100, fun))
-        this.lastActivity = new Date()
-    }
+const petSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
+  name: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  type: {
+    type: String,
+    enum: ['dog', 'cat', 'bird', 'rabbit'],
+    required: true
+  },
+  sprite: {
+    type: String,
+    required: true
+  },
+  energy: {
+    type: Number,
+    default: 100,
+    min: 0,
+    max: 100
+  },
+  sleep: {
+    type: Number,
+    default: 0,
+    min: 0,
+    max: 100
+  },
+  fun: {
+    type: Number,
+    default: 50,
+    min: 0,
+    max: 100
+  },
+  lastActivity: {
+    type: Date,
+    default: Date.now
+  }
+}, {
+  timestamps: true
+});
 
-    toJSON() {
-        return {
-            id: this.id,
-            userId: this.userId,
-            name: this.name,
-            type: this.type,
-            sprite: this.sprite,
-            energy: this.energy,
-            sleep: this.sleep,
-            fun: this.fun,
-            createdAt: this.createdAt,
-            lastActivity: this.lastActivity
-        }
-    }
-}
+// Método para actualizar estadísticas
+petSchema.methods.updateStats = function(energy, sleep, fun) {
+  this.energy = Math.max(0, Math.min(100, energy));
+  this.sleep = Math.max(0, Math.min(100, sleep));
+  this.fun = Math.max(0, Math.min(100, fun));
+  this.lastActivity = new Date();
+  return this.save();
+};
 
-export default Pet 
+// Método para convertir a JSON
+petSchema.methods.toJSON = function() {
+  const pet = this.toObject();
+  return pet;
+};
+
+const Pet = mongoose.model('Pet', petSchema);
+
+export default Pet; 

@@ -1,34 +1,76 @@
-import fs from 'fs-extra'
-import path from 'path'
-import { fileURLToPath } from 'url'
-import Hero from '../models/heroModel.js'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-const filePath = path.join(__dirname, '../data/superheroes.json')
+import Hero from '../models/heroModel.js';
 
 async function getHeroes() {
     try {
-        const data = await fs.readJson(filePath)
-        return data.map(hero => new Hero(
-            hero.id, hero.name, hero.alias, hero.city, hero.team
-        ))
+        const heroes = await Hero.find({});
+        return heroes;
     } catch (error) {
-        console.error(error)
-        return []
+        console.error('Error reading heroes:', error);
+        return [];
     }
 }
 
-async function saveHeroes(heroes) {
+async function getHeroById(id) {
     try {
-        await fs.writeJson(filePath, heroes)
+        return await Hero.findById(id);
     } catch (error) {
-        console.error(error)
-        throw error
+        console.error('Error finding hero by id:', error);
+        return null;
+    }
+}
+
+async function createHero(heroData) {
+    try {
+        const newHero = new Hero(heroData);
+        return await newHero.save();
+    } catch (error) {
+        console.error('Error creating hero:', error);
+        throw error;
+    }
+}
+
+async function updateHero(id, updateData) {
+    try {
+        return await Hero.findByIdAndUpdate(id, updateData, { new: true });
+    } catch (error) {
+        console.error('Error updating hero:', error);
+        throw error;
+    }
+}
+
+async function deleteHero(id) {
+    try {
+        return await Hero.findByIdAndDelete(id);
+    } catch (error) {
+        console.error('Error deleting hero:', error);
+        throw error;
+    }
+}
+
+async function findHeroesByTeam(team) {
+    try {
+        return await Hero.find({ team });
+    } catch (error) {
+        console.error('Error finding heroes by team:', error);
+        return [];
+    }
+}
+
+async function findHeroesByCity(city) {
+    try {
+        return await Hero.find({ city });
+    } catch (error) {
+        console.error('Error finding heroes by city:', error);
+        return [];
     }
 }
 
 export default {
     getHeroes,
-    saveHeroes
-} 
+    getHeroById,
+    createHero,
+    updateHero,
+    deleteHero,
+    findHeroesByTeam,
+    findHeroesByCity
+}; 

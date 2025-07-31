@@ -4,7 +4,9 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "start": "node app.js"
+    "start": "node app.js",
+    "dev": "node app.js",
+    "migrate": "node scripts/migrate-to-mongodb.js"
   },
   "keywords": [],
   "author": "javerage",
@@ -15,6 +17,8 @@
     "fs-extra": "^11.3.0",
     "express-validator": "^7.0.1",
     "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.0"
+    "swagger-ui-express": "^5.0.0",
+    "mongoose": "^8.0.0",
+    "dotenv": "^16.3.1"
   }
 }

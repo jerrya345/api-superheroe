@@ -6,6 +6,7 @@ import swaggerUi from 'swagger-ui-express'
 import swaggerJSDoc from 'swagger-jsdoc'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import connectDB from './config/database.js'
 
 console.log('🚀 Iniciando servidor...')
 
@@ -56,6 +57,9 @@ console.log('✅ Swagger configurado')
 const PORT = process.env.PORT || 3001
 
 console.log(`📡 Puerto configurado: ${PORT}`)
+
+// Conectar a MongoDB
+connectDB()
 
 // Manejo de errores global
 process.on('uncaughtException', (error) => {

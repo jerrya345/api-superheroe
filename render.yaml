@@ -8,4 +8,6 @@ services:
       - key: NODE_ENV
         value: production
       - key: PORT
-        value: 3001 
+        value: 3001
+      - key: MONGODB_URI
+        value: mongodb+srv://gerardoavilesmoreno28:3eDtvChgOqfmrUNj@cluster0.mongodb.net/api-superheroes?retryWrites=true&w=majority 

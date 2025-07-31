@@ -1,79 +1,80 @@
-import fs from 'fs-extra'
-import path from 'path'
-import { fileURLToPath } from 'url'
-import Pet from '../models/petModel.js'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-const filePath = path.join(__dirname, '../data/pets.json')
+import Pet from '../models/petModel.js';
 
 async function getPets() {
     try {
-        const data = await fs.readJson(filePath)
-        return data.map(pet => new Pet(
-            pet.id, pet.userId, pet.name, pet.type, pet.sprite, 
-            pet.energy, pet.sleep, pet.fun, pet.createdAt
-        ))
+        const pets = await Pet.find({}).populate('userId', 'username email');
+        return pets;
     } catch (error) {
-        console.error('Error reading pets:', error)
-        return []
-    }
-}
-
-async function savePets(pets) {
-    try {
-        await fs.writeJson(filePath, pets)
-    } catch (error) {
-        console.error('Error saving pets:', error)
-        throw error
+        console.error('Error reading pets:', error);
+        return [];
     }
 }
 
 async function getPetsByUserId(userId) {
-    const pets = await getPets()
-    return pets.filter(pet => pet.userId === userId)
+    try {
+        return await Pet.find({ userId }).populate('userId', 'username email');
+    } catch (error) {
+        console.error('Error finding pets by user id:', error);
+        return [];
+    }
 }
 
 async function getPetById(petId) {
-    const pets = await getPets()
-    return pets.find(pet => pet.id === petId)
+    try {
+        return await Pet.findById(petId).populate('userId', 'username email');
+    } catch (error) {
+        console.error('Error finding pet by id:', error);
+        return null;
+    }
 }
 
-async function createPet(pet) {
-    const pets = await getPets()
-    const newId = pets.length > 0 ? Math.max(...pets.map(p => p.id)) + 1 : 1
-    const newPet = new Pet(newId, pet.userId, pet.name, pet.type, pet.sprite)
-    
-    pets.push(newPet)
-    await savePets(pets)
-    return newPet
+async function createPet(petData) {
+    try {
+        const newPet = new Pet(petData);
+        return await newPet.save();
+    } catch (error) {
+        console.error('Error creating pet:', error);
+        throw error;
+    }
 }
 
 async function updatePet(petId, updates) {
-    const pets = await getPets()
-    const petIndex = pets.findIndex(pet => pet.id === petId)
-    
-    if (petIndex !== -1) {
-        pets[petIndex] = { ...pets[petIndex], ...updates }
-        await savePets(pets)
-        return pets[petIndex]
+    try {
+        return await Pet.findByIdAndUpdate(petId, updates, { new: true });
+    } catch (error) {
+        console.error('Error updating pet:', error);
+        throw error;
     }
-    
-    throw new Error('Pet not found')
 }
 
 async function deletePet(petId) {
-    const pets = await getPets()
-    const filteredPets = pets.filter(pet => pet.id !== petId)
-    await savePets(filteredPets)
+    try {
+        return await Pet.findByIdAndDelete(petId);
+    } catch (error) {
+        console.error('Error deleting pet:', error);
+        throw error;
+    }
+}
+
+async function updatePetStats(petId, energy, sleep, fun) {
+    try {
+        const pet = await Pet.findById(petId);
+        if (!pet) {
+            throw new Error('Pet not found');
+        }
+        return await pet.updateStats(energy, sleep, fun);
+    } catch (error) {
+        console.error('Error updating pet stats:', error);
+        throw error;
+    }
 }
 
 export default {
     getPets,
-    savePets,
     getPetsByUserId,
     getPetById,
     createPet,
     updatePet,
-    deletePet
-} 
+    deletePet,
+    updatePetStats
+}; 

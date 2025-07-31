@@ -1,29 +1,48 @@
-class User {
-    constructor(id, username, email, password, role = 'user', createdAt = new Date()) {
-        this.id = id
-        this.username = username
-        this.email = email
-        this.password = password // En producción debería estar hasheado
-        this.role = role // 'admin' o 'user'
-        this.createdAt = createdAt
-        this.lastLogin = null
-    }
+import mongoose from 'mongoose';
 
-    isAdmin() {
-        return this.role === 'admin'
-    }
+const userSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+    trim: true,
+    lowercase: true
+  },
+  password: {
+    type: String,
+    required: true
+  },
+  role: {
+    type: String,
+    enum: ['user', 'admin'],
+    default: 'user'
+  },
+  lastLogin: {
+    type: Date,
+    default: null
+  }
+}, {
+  timestamps: true
+});
 
-    toJSON() {
-        return {
-            id: this.id,
-            username: this.username,
-            email: this.email,
-            password: this.password,
-            role: this.role,
-            createdAt: this.createdAt,
-            lastLogin: this.lastLogin
-        }
-    }
-}
+// Método para verificar si es admin
+userSchema.methods.isAdmin = function() {
+  return this.role === 'admin';
+};
 
-export default User 
+// Método para convertir a JSON
+userSchema.methods.toJSON = function() {
+  const user = this.toObject();
+  delete user.password;
+  return user;
+};
+
+const User = mongoose.model('User', userSchema);
+
+export default User; 

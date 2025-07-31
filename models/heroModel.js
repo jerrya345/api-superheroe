@@ -1,11 +1,42 @@
-class Hero {
-    constructor(id, name, alias, city, team) {
-        this.id = id
-        this.name = name
-        this.alias = alias
-        this.city = city
-        this.team = team
-    }
-}
+import mongoose from 'mongoose';
 
-export default Hero 
+const heroSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  alias: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  city: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  team: {
+    type: String,
+    required: true,
+    trim: true
+  },
+  powers: [{
+    type: String,
+    trim: true
+  }],
+  description: {
+    type: String,
+    trim: true
+  },
+  imageUrl: {
+    type: String,
+    trim: true
+  }
+}, {
+  timestamps: true
+});
+
+const Hero = mongoose.model('Hero', heroSchema);
+
+export default Hero; 
