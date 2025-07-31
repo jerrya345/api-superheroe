@@ -2,8 +2,8 @@ import mongoose from 'mongoose';
 
 const connectDB = async () => {
   try {
-    // URL de MongoDB Atlas - necesitarás reemplazar con tu cluster real
-    const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://gerardoavilesmoreno28:3eDtvChgOqfmrUNj@cluster0.xxxxx.mongodb.net/api-superheroes?retryWrites=true&w=majority';
+    // URL correcta de MongoDB Atlas
+    const mongoURI = process.env.MONGODB_URI || 'mongodb+srv://gerardoavilesmoreno28:3eDtvChgOqfmrUNj@cluster0.wiekh5r.mongodb.net/api-superheroes?retryWrites=true&w=majority&appName=Cluster0';
     
     await mongoose.connect(mongoURI);
     
