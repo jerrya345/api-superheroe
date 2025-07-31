@@ -1,8 +1,11 @@
 // Script para probar la aplicación localmente
 import express from 'express'
 import heroController from './controllers/heroController.js'
+import authController from './controllers/authController.js'
+import petController from './controllers/petController.js'
 import swaggerUi from 'swagger-ui-express'
 import swaggerJSDoc from 'swagger-jsdoc'
+import connectDB from './config/database.js'
 
 console.log('🚀 Iniciando prueba local...')
 
@@ -13,8 +16,13 @@ try {
     
     app.use(express.json())
     app.use('/api', heroController)
+    app.use('/api/auth', authController)
+    app.use('/api/pets', petController)
     
     console.log('✅ Middleware configurado')
+    
+    // Conectar a MongoDB
+    await connectDB()
     
     const swaggerDefinition = {
         openapi: '3.0.0',

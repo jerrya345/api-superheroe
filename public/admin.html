@@ -317,15 +317,15 @@
                 const tbody = document.getElementById('usersTableBody');
                 tbody.innerHTML = users.map(user => `
                     <tr>
-                        <td>${user.id}</td>
+                        <td>${user._id}</td>
                         <td>${user.username}</td>
                         <td>${user.email}</td>
                         <td><span style="color: ${user.role === 'admin' ? '#dc3545' : '#28a745'}">${user.role}</span></td>
                         <td>${new Date(user.createdAt).toLocaleDateString()}</td>
                         <td>${user.lastLogin ? new Date(user.lastLogin).toLocaleDateString() : 'Nunca'}</td>
                         <td>
-                            <button class="action-btn edit-btn" onclick="editUser(${user.id})">✏️</button>
-                            <button class="action-btn delete-btn" onclick="deleteUser(${user.id})">🗑️</button>
+                            <button class="action-btn edit-btn" onclick="editUser('${user._id}')">✏️</button>
+                            <button class="action-btn delete-btn" onclick="deleteUser('${user._id}')">🗑️</button>
                         </td>
                     </tr>
                 `).join('');
@@ -343,16 +343,16 @@
                 const tbody = document.getElementById('petsTableBody');
                 tbody.innerHTML = pets.map(pet => `
                     <tr>
-                        <td>${pet.id}</td>
+                        <td>${pet._id}</td>
                         <td>${pet.name} ${pet.sprite}</td>
                         <td>${pet.type}</td>
-                        <td>${pet.userId}</td>
+                        <td>${pet.userId ? pet.userId.username || pet.userId : 'N/A'}</td>
                         <td>${pet.energy}%</td>
                         <td>${pet.sleep}%</td>
                         <td>${pet.fun}%</td>
                         <td>
-                            <button class="action-btn edit-btn" onclick="editPet(${pet.id})">✏️</button>
-                            <button class="action-btn delete-btn" onclick="deletePet(${pet.id})">🗑️</button>
+                            <button class="action-btn edit-btn" onclick="editPet('${pet._id}')">✏️</button>
+                            <button class="action-btn delete-btn" onclick="deletePet('${pet._id}')">🗑️</button>
                         </td>
                     </tr>
                 `).join('');
@@ -370,13 +370,13 @@
                 const tbody = document.getElementById('heroesTableBody');
                 tbody.innerHTML = heroes.map(hero => `
                     <tr>
-                        <td>${hero.id}</td>
+                        <td>${hero._id}</td>
                         <td>${hero.name}</td>
-                        <td>${hero.power}</td>
+                        <td>${hero.alias}</td>
                         <td>${hero.city}</td>
                         <td>
-                            <button class="action-btn edit-btn" onclick="editHero(${hero.id})">✏️</button>
-                            <button class="action-btn delete-btn" onclick="deleteHero(${hero.id})">🗑️</button>
+                            <button class="action-btn edit-btn" onclick="editHero('${hero._id}')">✏️</button>
+                            <button class="action-btn delete-btn" onclick="deleteHero('${hero._id}')">🗑️</button>
                         </td>
                     </tr>
                 `).join('');

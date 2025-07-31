@@ -1,7 +1,6 @@
 import express from "express"
 import { check, validationResult } from 'express-validator'
 import heroService from "../services/heroService.js"
-import Hero from "../models/heroModel.js"
 
 const router = express.Router()
 
@@ -27,8 +26,8 @@ router.post("/heroes",
 
         try {
             const { name, alias, city, team } = req.body
-            const newHero = new Hero(null, name, alias, city, team)
-            const addedHero = await heroService.addHero(newHero)
+            const heroData = { name, alias, city, team }
+            const addedHero = await heroService.addHero(heroData)
 
             res.status(201).json(addedHero)
         } catch (error) {
