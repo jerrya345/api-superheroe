@@ -17,9 +17,7 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: process.env.NODE_ENV === 'production' 
-        ? 'https://api-superheroe.onrender.com/api'
-        : 'http://localhost:3001/api',
+      url: 'https://api-superheroe.onrender.com/api',
     },
   ],
 }
