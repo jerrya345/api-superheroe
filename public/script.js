@@ -203,7 +203,7 @@ function updatePetDisplay() {
 // Actualizar mascota en la API
 async function updatePetInAPI() {
     try {
-        const response = await fetch(`${API_URL}/pets/${window.currentPet.id}/stats`, {
+        const response = await fetch(`${API_URL}/pets/${window.currentPet._id}/stats`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'

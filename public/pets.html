@@ -144,7 +144,7 @@
 
         async function loadUserPets() {
             try {
-                const response = await fetch(`${API_URL}/pets/user/${currentUser.id}`);
+                const response = await fetch(`${API_URL}/pets/user/${currentUser._id}`);
                 userPets = await response.json();
                 displayPets();
             } catch (error) {
@@ -199,7 +199,7 @@
                                     <span>${pet.fun}%</span>
                                 </div>
                             </div>
-                            <button class="activity-btn" onclick="playWithPet(${pet.id})">
+                            <button class="activity-btn" onclick="playWithPet('${pet._id}')">
                                 🎮 Jugar con ${pet.name}
                             </button>
                         </div>
@@ -246,7 +246,7 @@
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        userId: currentUser.id,
+                        userId: currentUser._id,
                         name: name,
                         type: type
                     })
@@ -268,7 +268,7 @@
 
         function playWithPet(petId) {
             // Guardar la mascota seleccionada y redirigir al juego
-            const selectedPet = userPets.find(pet => pet.id === petId);
+            const selectedPet = userPets.find(pet => pet._id === petId);
             if (selectedPet) {
                 localStorage.setItem('selectedPet', JSON.stringify(selectedPet));
                 window.location.href = 'index.html';
