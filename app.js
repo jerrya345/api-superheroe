@@ -17,7 +17,9 @@ const swaggerDefinition = {
   },
   servers: [
     {
-      url: 'http://localhost:3001/api',
+      url: process.env.NODE_ENV === 'production' 
+        ? 'https://api-superheroe.onrender.com/api'
+        : 'http://localhost:3001/api',
     },
   ],
 }
@@ -31,7 +33,7 @@ const swaggerSpec = swaggerJSDoc(options)
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en el puerto ${PORT}`)
     console.log(`API disponible en: http://localhost:${PORT}/api`)
