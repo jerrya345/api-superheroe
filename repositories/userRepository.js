@@ -21,7 +21,17 @@ async function getUsers() {
 
 async function saveUsers(users) {
     try {
-        await fs.writeJson(filePath, users)
+        // Convertir usuarios a objetos planos incluyendo la contraseña
+        const usersData = users.map(user => ({
+            id: user.id,
+            username: user.username,
+            email: user.email,
+            password: user.password,
+            role: user.role,
+            createdAt: user.createdAt,
+            lastLogin: user.lastLogin
+        }))
+        await fs.writeJson(filePath, usersData)
     } catch (error) {
         console.error('Error saving users:', error)
         throw error

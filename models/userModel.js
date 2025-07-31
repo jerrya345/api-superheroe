@@ -18,6 +18,7 @@ class User {
             id: this.id,
             username: this.username,
             email: this.email,
+            password: this.password,
             role: this.role,
             createdAt: this.createdAt,
             lastLogin: this.lastLogin
