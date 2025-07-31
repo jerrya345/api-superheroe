@@ -42,22 +42,25 @@ const apiStatus = document.getElementById('apiStatus');
 
 // Inicializar
 document.addEventListener('DOMContentLoaded', function() {
-    // Cargar mascota seleccionada si existe
-    if (window.currentPet) {
-        pet = {
-            name: window.currentPet.name,
-            energy: window.currentPet.energy,
-            sleep: window.currentPet.sleep,
-            fun: window.currentPet.fun,
-            sprite: window.currentPet.sprite
-        };
-        addMessage(`¡Bienvenido! ${pet.name} está lista para jugar.`, 'info');
-    } else {
-        addMessage('¡Bienvenido! Tu mascota está lista para jugar.', 'info');
-    }
-    
-    updatePetDisplay();
-    testAPI();
+    // Esperar un poco para que window.currentPet esté disponible
+    setTimeout(() => {
+        // Cargar mascota seleccionada si existe
+        if (window.currentPet) {
+            pet = {
+                name: window.currentPet.name,
+                energy: window.currentPet.energy,
+                sleep: window.currentPet.sleep,
+                fun: window.currentPet.fun,
+                sprite: window.currentPet.sprite
+            };
+            addMessage(`¡Bienvenido! ${pet.name} está lista para jugar.`, 'info');
+        } else {
+            addMessage('¡Bienvenido! Tu mascota está lista para jugar.', 'info');
+        }
+        
+        updatePetDisplay();
+        testAPI();
+    }, 100);
 });
 
 // Actualizar la visualización de la mascota

@@ -100,17 +100,8 @@
             const pet = JSON.parse(selectedPet);
             window.currentPet = pet;
             
-            // Actualizar la interfaz con la mascota seleccionada
-            document.getElementById('petName').textContent = pet.name;
-            document.getElementById('petSprite').textContent = pet.sprite;
-            
-            // Actualizar stats
-            document.getElementById('energyBar').style.width = pet.energy + '%';
-            document.getElementById('energyValue').textContent = pet.energy + '%';
-            document.getElementById('sleepBar').style.width = pet.sleep + '%';
-            document.getElementById('sleepValue').textContent = pet.sleep + '%';
-            document.getElementById('funBar').style.width = pet.fun + '%';
-            document.getElementById('funValue').textContent = pet.fun + '%';
+            // No actualizar aquí, dejar que script.js lo haga
+            // para evitar conflictos
         });
 
         // Función para volver a la lista de mascotas
